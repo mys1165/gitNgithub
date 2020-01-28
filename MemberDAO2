@@ -149,4 +149,69 @@ public MemberDTO updateui(String id) {
 	
 	
 }
+
+public void update(MemberDTO dto) {
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "update member2 set name= ?, age = ? where id=?";
+		try {
+			conn = dataFactory.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, dto.getName());
+			pstmt.setInt(2, dto.getAge());
+			pstmt.setString(3, dto.getId());
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll(null, pstmt, conn);
+		}
+	}
+
+	public void delete(String id) {
+		MemberDTO dto = null;
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "delete from member2 where id = ?";
+		ResultSet rs = null;
+
+		try {
+			conn = dataFactory.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			int a = pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			closeAll(null, pstmt, conn);
+		}
+	}
+
+	public MemberDTO login(String id, int age) {
+		MemberDTO dto = null;
+		
+		Connection conn = null;
+		PreparedStatement pstmt = null;
+		String sql = "select * from member2 where id= ? and age=?";
+		ResultSet rs = null;
+		try {
+			conn=dataFactory.getConnection();
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, id);
+			pstmt.setInt(2, age);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				String name = rs.getString("name");
+				dto = new MemberDTO(id, name, age);
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			closeAll(rs, pstmt, conn);
+		}
+		return dto;
+	}
 }
