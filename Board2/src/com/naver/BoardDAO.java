@@ -16,7 +16,12 @@ import oracle.net.aso.p;
 
 public class BoardDAO {
 	private DataSource dataFactory;
-
+private static void name() {
+	
+} 
+private void name1() {
+	
+}
 	public BoardDAO() {
 		try {
 			Context ctx = new InitialContext();
